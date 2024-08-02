@@ -1,0 +1,20 @@
+body{
+    background-image: url(/assets/blue-gradient-abstract-background-empty-room-with-space-your-text-picture_1258-82820.jpg);
+    background-position: center;
+    background-size: cover;
+    color: white;
+}
+
+.container{
+    width: 100%;
+}
+
+.update-space{
+    border-radius: 10px;
+    box-shadow: 20px 20px 30px black;
+    padding: 20px;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.7);
+    transform: translateY(-27%);
+    opacity: 0;
+}
