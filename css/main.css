@@ -1,5 +1,5 @@
 body{
-    background-image: url(/assets/blue-gradient-abstract-background-empty-room-with-space-your-text-picture_1258-82820.jpg);
+    background-image: url(../assets/blue-gradient-abstract-background-empty-room-with-space-your-text-picture_1258-82820.jpg);
     background-position: center;
     background-size: cover;
     color: white;
@@ -17,4 +17,8 @@ body{
     background-color: rgba(0, 0, 0, 0.7);
     transform: translateY(-27%);
     opacity: 0;
+}
+
+.Error::placeholder{
+    color: tomato;
 }

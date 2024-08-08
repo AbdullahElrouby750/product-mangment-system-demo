@@ -6,7 +6,7 @@
     <title>Product Mangment System</title>
 
     <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css/./main.css">
+    <link rel="stylesheet" href="./css/main.css">
 </head>
 <body class=" p-5">
 
@@ -14,28 +14,28 @@
         <h1>Product Mangement system</h1>
             <div class=" form-group m-4">
                 <label for="">Product Name</label>
-                <input type="text" class=" form-control" id="productName">
+                <input type="text" class=" form-control" id="productName" placeholder = "Enter the product name">
                 
                 <h6 id="nameErrorMsg" class=" text-danger"></h6>
 
             </div>
             <div class=" form-group m-4">
                 <label for="">Product Price</label>
-                <input type="text" class=" form-control" name="" id="productPrice">
+                <input type="text" class=" form-control" name="" id="productPrice" placeholder = "Enter the product price">
                 
                 <h6 id="priceErrorMsg" class=" text-danger"></h6>
 
             </div>
             <div class=" form-group m-4">
                 <label for="">Product Category</label>
-                <input type="text" class=" form-control" name="" id="productCat">
+                <input type="text" class=" form-control" name="" id="productCat" placeholder = "Enter the product Category">
                 
                 <h6 id="catErrorMsg" class=" text-danger"></h6>
 
             </div>
             <div class=" form-group m-4">
                 <label for="">Product Descreption</label>
-                <input type="text" class=" form-control" name="" id="productDis">
+                <input type="text" class=" form-control" name="" id="productDis" placeholder = "Enter the product descreption">
                 
                 <h6 id="disErrorMsg" class=" text-danger"></h6>
 
@@ -43,6 +43,12 @@
 
             <button class="btn btn-primary" id = "addBtn" onclick="addProduct(-1)">Add product</button>
     </div>
+
+    <div class="search form-group my-5">
+        <label for="">Search products</label>
+        <input type="text" class=" form-control" oninput="searchProduct(this.value)">
+    </div>
+
 
     <div class="product-table">
         <table class=" table text-white" id = "productTable"></tbody></table>

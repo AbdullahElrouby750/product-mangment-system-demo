@@ -1,6 +1,13 @@
+
+
+
+
 const tableHead = ``;
 
-let products = [];
+let products = localStorage.getItem('products') ? JSON.parse(localStorage.getItem('products')) : [];
+
+
+console.log(products);
 
 let productName;
 let productPrice;
@@ -14,55 +21,159 @@ let checkprice = false;
 let checkCat = false;
 let checkDis = false;
 
-function checkProductName() {
+displayProduct(products);
+
+
+// commone regex
+const lengthRegex = /(\w{2,})/;
+const upperCaseregex = /^[A-Z]/;
+const allowedCahrRegex = /\w+/;
+function updatelocalStorage() {
+    localStorage.setItem("products", JSON.stringify(products));
+}
+
+function checkProductName(thisProductIndex) {
     let name = productName.value;
+    productName.style.border = "5px solid red";
+    productName.classList.add("Error");
 
     // console.log('name: ' + name);
-
-    if (name.length == 0) {
-        document.getElementById('nameErrorMsg').innerText = 'Enter a valid name';
-        return false
-    }
-    document.getElementById('nameErrorMsg').innerText = '';
-    return true;
-}
-
-function checkProductPrice() {
-    let price = +productPrice.value;
-
-    // console.log('price: ' + price);
-
-    if (isNaN(price) || price <= 0) {
-        document.getElementById('priceErrorMsg').innerText = 'Enter a valid price';
+    if (!lengthRegex.test(name)) {
+        thisProductIndex == -1 ?
+            document.getElementById('nameErrorMsg').innerText = 'Product name should be at least 2 characters long' :
+            document.getElementById('updatingNameErrorMsg').innerText = 'Product name should be at least 2 characters long';
         return false;
     }
-    document.getElementById('priceErrorMsg').innerText = '';
+    else if (!upperCaseregex.test(name)) {
+        thisProductIndex == -1 ?
+            document.getElementById('nameErrorMsg').innerText = 'Product name must start with uppercase letter' :
+            document.getElementById('updatingNameErrorMsg').innerText = 'Product name must start with uppercase letter';
+        return false;
+    }
+    else if (!allowedCahrRegex.test(name)) {
+        thisProductIndex == -1 ?
+            document.getElementById('nameErrorMsg').innerText = 'Product name should only contain alphanumeric characters and underscores' :
+            document.getElementById('updatingNameErrorMsg').innerText = 'Product name should only contain alphanumeric characters and underscores';
+        return false;
+    }
+    
+    thisProductIndex == -1 ?
+    document.getElementById('nameErrorMsg').innerText = '':
+    document.getElementById('updatingNameErrorMsg').innerText = '';
+    
+    productName.style.border = "5px solid green";
+    productName.classList.remove("Error");
+
     return true;
 }
 
-function checkProductCat() {
+function checkProductPrice(thisProductIndex) {
+    let price = +productPrice.value;
+    const regex = /^(?!-)(?!0(\.0+)?$)([1-9]\d*(\.\d*)?)$/
+
+    // console.log(regex.test(price));
+
+    // console.log('price: ' + price);/
+
+
+    productPrice.style.border = "5px solid red";
+    productPrice.classList.add("Error");
+
+
+    if (!regex.test(price) || price < 0) {
+        thisProductIndex == -1 ?
+            document.getElementById('priceErrorMsg').innerText = 'Product price must be a positive integer >= 1' :
+            document.getElementById('updatingPriceErrorMsg').innerText = 'Product price must be a positive integer >= 1';
+        return false;
+    }
+
+    thisProductIndex == -1 ?
+    document.getElementById('priceErrorMsg').innerText = '':
+    document.getElementById('updatingPriceErrorMsg').innerText = '';
+
+    productPrice.style.border = "5px solid green";
+    productPrice.classList.remove("Error");
+
+    return true;
+}
+
+function checkProductCat(thisProductIndex) {
     let category = '';
     category = productCat.value;
 
     // console.log('category: ' + category);
 
-    if (category.length == 0) {
-        document.getElementById('catErrorMsg').innerText = 'Enter a valid category';
+
+
+    productCat.style.border = "5px solid red";
+    productCat.classList.add("Error");
+
+    if (!lengthRegex.test(category)) {
+        thisProductIndex == -1 ?
+            document.getElementById('catErrorMsg').innerText = 'Product category should be at least 2 characters long' :
+            document.getElementById('updatingCatErrorMsg').innerText = 'Product category should be at least 2 characters long';
         return false;
     }
-    document.getElementById('catErrorMsg').innerText = '';
+    else if (!upperCaseregex.test(category)) {
+        thisProductIndex == -1 ?
+            document.getElementById('catErrorMsg').innerText = 'Product category must start with uppercase letter' :
+            document.getElementById('updatingCatErrorMsg').innerText = 'Product category must start with uppercase letter';
+        return false;
+    }
+    else if (!allowedCahrRegex.test(category)) {
+        thisProductIndex == -1 ?
+            document.getElementById('catErrorMsg').innerText = 'Product category should only contain alphanumeric characters and underscores' :
+            document.getElementById('updatingCatErrorMsg').innerText = 'Product category should only contain alphanumeric characters and underscores';
+        return false;
+    }
+    
+    thisProductIndex == -1 ?
+    document.getElementById('catErrorMsg').innerText = '':
+    document.getElementById('updatingCatErrorMsg').innerText = '';
+
+    productCat.style.border = "5px solid green";
+    productCat.classList.remove("Error");
+
     return true;
 }
-function checkProductDis() {
+function checkProductDis(thisProductIndex) {
     let descreption = productDis.value;
 
     // console.log('dis: ' + descreption);
+    const lengthRegex = /(\w{4,})/;
+    const upperCaseregex = /^[A-Z1-9]/;
 
-    if (descreption.length == 0) {
-        document.getElementById('disErrorMsg').innerText = 'Enter a valid descreption';
+
+
+    productDis.style.border = "5px solid red";
+    productDis.classList.add("Error");
+
+    if (!lengthRegex.test(descreption)) {
+        thisProductIndex == -1 ?
+            document.getElementById('disErrorMsg').innerText = 'Product descreption should be at least 4 characters long' :
+            document.getElementById('updatingDisErrorMsg').innerText = 'Product descreption should be at least 4 characters long';
         return false;
     }
-    document.getElementById('disErrorMsg').innerText = '';
+    else if (!upperCaseregex.test(descreption)) {
+        thisProductIndex == -1 ?
+            document.getElementById('disErrorMsg').innerText = 'Product descreption must start with uppercase letter' :
+            document.getElementById('updatingDisErrorMsg').innerText = 'Product descreption must start with uppercase letter';
+        return false;
+    }
+    else if (!allowedCahrRegex.test(descreption)) {
+        thisProductIndex == -1 ?
+            document.getElementById('disErrorMsg').innerText = 'Product descreption should only contain alphanumeric characters and underscores' :
+            document.getElementById('updatingDisErrorMsg').innerText = 'Product descreption should only contain alphanumeric characters and underscores';
+        return false;
+    }
+    
+    thisProductIndex == -1 ?
+    document.getElementById('disErrorMsg').innerText = '':
+    document.getElementById('updatingDisErrorMsg').innerText = '';
+
+    productDis.style.border = "5px solid green";
+    productDis.classList.remove("Error");
+
     return true;
 }
 
@@ -77,10 +188,10 @@ function addProduct(thisProductIndex) {
     }
 
     let canAdd = false;
-    checkName = checkProductCat();
-    checkprice = checkProductName();
-    checkCat = checkProductPrice();
-    checkDis = checkProductDis();
+    checkName = checkProductCat(thisProductIndex);
+    checkprice = checkProductName(thisProductIndex);
+    checkCat = checkProductPrice(thisProductIndex);
+    checkDis = checkProductDis(thisProductIndex);
 
     // console.log(checkName);
     // console.log(checkprice);
@@ -108,20 +219,27 @@ function addProduct(thisProductIndex) {
                 discribe: productDis.value
             }
         }
-
-        displayProduct();
+        updatelocalStorage(products);
+        displayProduct(products);
         productName.value = '';
+        productName.style.border = "none";
+
         productPrice.value = '';
+        productPrice.style.border = "none";
+
         productCat.value = '';
+        productCat.style.border = "none";
+
         productDis.value = '';
+        productDis.style.border = "none";
     }
+    return canAdd;
 }
 
 //display products
-function displayProduct() {
-
+function displayProduct(productsList) {
     let tableBody = '';
-    console.log(products);
+    console.log(productsList);
 
     if (productTable.children.length === 0) {
         console.log('creating head');
@@ -137,19 +255,20 @@ function displayProduct() {
     </thead>
     <tbody id = "tableBody" class = " text-center"></tbody>`;
     }
-    else if (products.length == 0) {
+    else if (productsList.length == 0) {
         document.getElementById('productTable').innerHTML = "";
         return;
     }
 
-    for (let productIndex = 0; productIndex < products.length; productIndex++) {
+    for (let productIndex = 0; productIndex < productsList.length; productIndex++) {
 
+        //check for spanName prop (array sent from search)
         tableBody += `<tr id = "product${productIndex + 1}">
         <td>${productIndex + 1}</td>
-        <td>${products[productIndex].name}</td>
-        <td>$${products[productIndex].price}</td>
-        <td>${products[productIndex].category}</td>
-        <td>${products[productIndex].discribe}</td>
+        <td>${productsList[productIndex].spanName ? productsList[productIndex].spanName : productsList[productIndex].name}</td>
+        <td>$${productsList[productIndex].price}</td>
+        <td>${productsList[productIndex].category}</td>
+        <td>${productsList[productIndex].discribe}</td>
         <td><button onclick=\"updatProduct(${productIndex})\" class="btn btn-warning">Update</button></td>
         <td><button onclick=\"deleteProduct(${productIndex})\" class="btn btn-danger">Delete</button></td>
     </tr>`;
@@ -158,13 +277,16 @@ function displayProduct() {
     document.getElementById('tableBody').innerHTML = tableBody;
 }
 
+//delete funtion
 function deleteProduct(targetedIndex) {
 
     products.splice(targetedIndex, 1);
-    displayProduct();
+    displayProduct(products);
+    updatelocalStorage(products);
 
 }
 
+//update function
 function updatProduct(targetedIndex) {
 
     let updatingBox = `<div class="container">
@@ -198,14 +320,15 @@ function updatProduct(targetedIndex) {
     
                 </div>
     
-                <button class="btn btn-primary" id = "updateDone" onclick="updateDone(${targetedIndex}, updatingSpace)">Done</button>
+                <button class="btn btn-success" id = "updateDone" onclick="updateDone(${targetedIndex}, updatingSpace)">Done</button>
+                <button class="btn btn-warning" id = "cancelUpdate" onclick="cancelUpdate(updatingSpace)">Cancel</button>
         </div>`;
 
     const updatingSpace = document.getElementById('updatingSpace');
     updatingSpace.style.opacity = 1;
     updatingSpace.innerHTML = updatingBox;
 }
-
+//add the update
 function updateDone(targetedIndex, updatingSpace) {
 
     console.log('updating', targetedIndex + 1);
@@ -213,8 +336,38 @@ function updateDone(targetedIndex, updatingSpace) {
     productPrice = document.getElementById('updatingPrice');
     productCat = document.getElementById('updatingCat');
     productDis = document.getElementById('updatingDis');
-    addProduct(targetedIndex);
+
+
+    let update = addProduct(targetedIndex);
+
+    if (update) {
+        updatingSpace.innerHTML = "";
+        updatingSpace.style.opacity = 0;
+    }
+}
+//cancel the update
+function cancelUpdate(updatingSpace) {
     updatingSpace.innerHTML = "";
     updatingSpace.style.opacity = 0;
+}
+
+//search function
+function searchProduct(data) {
+    console.log(data);
+    let searchProductsList = [];
+    for (let index = 0; index < products.length; index++) {
+        if (products[index].name.toLowerCase().includes(data.toLowerCase())) {
+
+            //highlight the entered characters in the search
+            searchProductsList.push(products[index]);
+            searchProductsList[searchProductsList.length-1].spanName = products[index].name.toLowerCase().replaceAll(data.toLowerCase(), `<span class="text-danger fw-bold">${data.toLowerCase()}</span>`);
+            
+        }
+    }
+
+    console.log('new list', searchProductsList);
+
+
+    displayProduct(searchProductsList);
 
 }
