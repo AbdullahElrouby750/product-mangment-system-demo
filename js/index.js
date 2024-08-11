@@ -260,6 +260,8 @@ function displayProduct(productsList) {
 
         const updateIndex = products.indexOf(productsList[productIndex]);
         
+        // console.log('span',productsList[productIndex].spanName);
+        
         //check for spanName prop (array sent from search)
         tableBody += `<tr id = "product${productIndex + 1}">
         <td>${productIndex + 1}</td>
@@ -349,30 +351,54 @@ function cancelUpdate(updatingSpace) {
     updatingSpace.style.opacity = 0;
 }
 
-//search function
+// //search function
+// function searchProduct(data) {
+//     // console.log(data.length);
+//     data.toLowerCase()
+//     // console.log('data: ' + data);
+//     let searchProductsList = [];
+//     let targetName = '';
+//     for (let index = 0; index < products.length; index++) {
+//         targetName = products[index].name;
+//         if (targetName.toLowerCase().includes(data.toLowerCase())) {
+
+//             //highlight the entered characters in the search
+//             if(targetName[0].toLowerCase() == data[0]){
+//                 data = data.length > 1 ? data.charAt(0).toUpperCase() + data.substring(1) : data.charAt(0).toUpperCase();
+//             }
+//             // console.log('data: ' + data);
+            
+//             searchProductsList.push(products[index]);
+//             searchProductsList[searchProductsList.length-1].spanName = targetName.replaceAll(data.trim(), `<span class="text-danger fw-bold">${data}</span>`);
+            
+//         }
+//     }
+
+//     // console.log('new list', searchProductsList);
+//     displayProduct(searchProductsList);
+// }
+
+
 function searchProduct(data) {
-    // console.log(data.length);
-    data.toLowerCase()
-    // console.log('data: ' + data);
-    let searchProductsList = [];
-    let targetName = '';
-    for (let index = 0; index < products.length; index++) {
-        targetName = products[index].name;
-        if (targetName.toLowerCase().includes(data.toLowerCase())) {
+    
+    if(data.length > 0 || data.trim().length > 0){
+        data.toLowerCase()
+        let searchProductsList = [];
+    
+        for (let index = 0; index < products.length; index++) {
+            if (products[index].name.toLowerCase().includes(data.toLowerCase())) {
+    
+                //highlight the entered characters in the search
+                let productCopy = {...products[index]};
+                productCopy["spanName"] = products[index].name.toLowerCase().replaceAll(data.toLowerCase(), `<span class="text-danger fw-bold">${data.toLowerCase()}</span>`);
 
-            //highlight the entered characters in the search
-            if(targetName[0].toLowerCase() == data[0]){
-                data = data.length > 1 ? data.charAt(0).toUpperCase() + data.substring(1) : data.charAt(0).toUpperCase();
+                searchProductsList.push(productCopy);
             }
-            // console.log('data: ' + data);
-            
-            searchProductsList.push(products[index]);
-            searchProductsList[searchProductsList.length-1].spanName = targetName.replaceAll(data.trim(), `<span class="text-danger fw-bold">${data}</span>`);
-            
         }
+        displayProduct(searchProductsList);
     }
-
-    // console.log('new list', searchProductsList);
-    displayProduct(searchProductsList);
+    else{
+        displayProduct(products);
+    }
 
 }
