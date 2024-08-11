@@ -1,13 +1,9 @@
-
-
-
-
 const tableHead = ``;
 
 let products = localStorage.getItem('products') ? JSON.parse(localStorage.getItem('products')) : [];
 
 
-console.log(products);
+// console.log(products);
 
 let productName;
 let productPrice;
@@ -239,10 +235,10 @@ function addProduct(thisProductIndex) {
 //display products
 function displayProduct(productsList) {
     let tableBody = '';
-    console.log(productsList);
+    // console.log(productsList);
 
     if (productTable.children.length === 0) {
-        console.log('creating head');
+        // console.log('creating head');
         productTable.innerHTML =
             `<thead id = "tableHead" class = " text-center">
         <th>Index</th>
@@ -262,6 +258,8 @@ function displayProduct(productsList) {
 
     for (let productIndex = 0; productIndex < productsList.length; productIndex++) {
 
+        const updateIndex = products.indexOf(productsList[productIndex]);
+        
         //check for spanName prop (array sent from search)
         tableBody += `<tr id = "product${productIndex + 1}">
         <td>${productIndex + 1}</td>
@@ -269,8 +267,8 @@ function displayProduct(productsList) {
         <td>$${productsList[productIndex].price}</td>
         <td>${productsList[productIndex].category}</td>
         <td>${productsList[productIndex].discribe}</td>
-        <td><button onclick=\"updatProduct(${productIndex})\" class="btn btn-warning">Update</button></td>
-        <td><button onclick=\"deleteProduct(${productIndex})\" class="btn btn-danger">Delete</button></td>
+        <td><button onclick=\"updatProduct(${updateIndex})\" class="btn btn-warning">Update</button></td>
+        <td><button onclick=\"deleteProduct(${updateIndex})\" class="btn btn-danger">Delete</button></td>
     </tr>`;
     }
 
@@ -331,7 +329,7 @@ function updatProduct(targetedIndex) {
 //add the update
 function updateDone(targetedIndex, updatingSpace) {
 
-    console.log('updating', targetedIndex + 1);
+    // console.log('updating', targetedIndex + 1);
     productName = document.getElementById('updatingName');
     productPrice = document.getElementById('updatingPrice');
     productCat = document.getElementById('updatingCat');
@@ -353,21 +351,28 @@ function cancelUpdate(updatingSpace) {
 
 //search function
 function searchProduct(data) {
-    console.log(data);
+    // console.log(data.length);
+    data.toLowerCase()
+    // console.log('data: ' + data);
     let searchProductsList = [];
+    let targetName = '';
     for (let index = 0; index < products.length; index++) {
-        if (products[index].name.toLowerCase().includes(data.toLowerCase())) {
+        targetName = products[index].name;
+        if (targetName.toLowerCase().includes(data.toLowerCase())) {
 
             //highlight the entered characters in the search
+            if(targetName[0].toLowerCase() == data[0]){
+                data = data.length > 1 ? data.charAt(0).toUpperCase() + data.substring(1) : data.charAt(0).toUpperCase();
+            }
+            // console.log('data: ' + data);
+            
             searchProductsList.push(products[index]);
-            searchProductsList[searchProductsList.length-1].spanName = products[index].name.toLowerCase().replaceAll(data.toLowerCase(), `<span class="text-danger fw-bold">${data.toLowerCase()}</span>`);
+            searchProductsList[searchProductsList.length-1].spanName = targetName.replaceAll(data.trim(), `<span class="text-danger fw-bold">${data}</span>`);
             
         }
     }
 
-    console.log('new list', searchProductsList);
-
-
+    // console.log('new list', searchProductsList);
     displayProduct(searchProductsList);
 
 }
