@@ -22,3 +22,7 @@ body{
 .Error::placeholder{
     color: tomato;
 }
+i{
+    font-size: 10rem;
+    color : white;
+}

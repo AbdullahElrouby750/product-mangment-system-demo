@@ -52,11 +52,11 @@ function checkProductName(thisProductIndex) {
             document.getElementById('updatingNameErrorMsg').innerText = 'Product name should only contain alphanumeric characters and underscores';
         return false;
     }
-    
+
     thisProductIndex == -1 ?
-    document.getElementById('nameErrorMsg').innerText = '':
-    document.getElementById('updatingNameErrorMsg').innerText = '';
-    
+        document.getElementById('nameErrorMsg').innerText = '' :
+        document.getElementById('updatingNameErrorMsg').innerText = '';
+
     productName.style.border = "5px solid green";
     productName.classList.remove("Error");
 
@@ -84,8 +84,8 @@ function checkProductPrice(thisProductIndex) {
     }
 
     thisProductIndex == -1 ?
-    document.getElementById('priceErrorMsg').innerText = '':
-    document.getElementById('updatingPriceErrorMsg').innerText = '';
+        document.getElementById('priceErrorMsg').innerText = '' :
+        document.getElementById('updatingPriceErrorMsg').innerText = '';
 
     productPrice.style.border = "5px solid green";
     productPrice.classList.remove("Error");
@@ -122,10 +122,10 @@ function checkProductCat(thisProductIndex) {
             document.getElementById('updatingCatErrorMsg').innerText = 'Product category should only contain alphanumeric characters and underscores';
         return false;
     }
-    
+
     thisProductIndex == -1 ?
-    document.getElementById('catErrorMsg').innerText = '':
-    document.getElementById('updatingCatErrorMsg').innerText = '';
+        document.getElementById('catErrorMsg').innerText = '' :
+        document.getElementById('updatingCatErrorMsg').innerText = '';
 
     productCat.style.border = "5px solid green";
     productCat.classList.remove("Error");
@@ -162,10 +162,10 @@ function checkProductDis(thisProductIndex) {
             document.getElementById('updatingDisErrorMsg').innerText = 'Product descreption should only contain alphanumeric characters and underscores';
         return false;
     }
-    
+
     thisProductIndex == -1 ?
-    document.getElementById('disErrorMsg').innerText = '':
-    document.getElementById('updatingDisErrorMsg').innerText = '';
+        document.getElementById('disErrorMsg').innerText = '' :
+        document.getElementById('updatingDisErrorMsg').innerText = '';
 
     productDis.style.border = "5px solid green";
     productDis.classList.remove("Error");
@@ -235,6 +235,8 @@ function addProduct(thisProductIndex) {
 //display products
 function displayProduct(productsList) {
     let tableBody = '';
+
+    if(btnChecked.length == 0)productsList.sort((a, b) => a.name.localeCompare(b.name));
     // console.log(productsList);
 
     if (productTable.children.length === 0) {
@@ -242,10 +244,10 @@ function displayProduct(productsList) {
         productTable.innerHTML =
             `<thead id = "tableHead" class = " text-center">
         <th>Index</th>
-        <th>Name</th>
-        <th>Price $</th>
-        <th>Category</th>
-        <th>Descreption</th>
+        <th><button name = "name" id = "nameCol" class = "sort-btn btn text-light fw-bold p-0">Name</button></th>
+        <th><button name = "price" id = "priceCol" class = "sort-btn btn text-light fw-bold p-0">Price</button>$</th>
+        <th><button name = "category" id = "catCol" class = "sort-btn btn text-light fw-bold p-0">Category</button></th>
+        <th><button name = "discribe" id = "desCol" class = "sort-btn btn text-light fw-bold p-0">Descreption</button></th>
         <th>Update</th>
         <th>Delete</th>
     </thead>
@@ -259,9 +261,9 @@ function displayProduct(productsList) {
     for (let productIndex = 0; productIndex < productsList.length; productIndex++) {
 
         const updateIndex = products.indexOf(productsList[productIndex]);
-        
+
         // console.log('span',productsList[productIndex].spanName);
-        
+
         //check for spanName prop (array sent from search)
         tableBody += `<tr id = "product${productIndex + 1}">
         <td>${productIndex + 1}</td>
@@ -273,9 +275,14 @@ function displayProduct(productsList) {
         <td><button onclick=\"deleteProduct(${updateIndex})\" class="btn btn-danger">Delete</button></td>
     </tr>`;
     }
-
     document.getElementById('tableBody').innerHTML = tableBody;
+
+
 }
+
+
+//sorting the table
+
 
 //delete funtion
 function deleteProduct(targetedIndex) {
@@ -351,45 +358,18 @@ function cancelUpdate(updatingSpace) {
     updatingSpace.style.opacity = 0;
 }
 
-// //search function
-// function searchProduct(data) {
-//     // console.log(data.length);
-//     data.toLowerCase()
-//     // console.log('data: ' + data);
-//     let searchProductsList = [];
-//     let targetName = '';
-//     for (let index = 0; index < products.length; index++) {
-//         targetName = products[index].name;
-//         if (targetName.toLowerCase().includes(data.toLowerCase())) {
-
-//             //highlight the entered characters in the search
-//             if(targetName[0].toLowerCase() == data[0]){
-//                 data = data.length > 1 ? data.charAt(0).toUpperCase() + data.substring(1) : data.charAt(0).toUpperCase();
-//             }
-//             // console.log('data: ' + data);
-            
-//             searchProductsList.push(products[index]);
-//             searchProductsList[searchProductsList.length-1].spanName = targetName.replaceAll(data.trim(), `<span class="text-danger fw-bold">${data}</span>`);
-            
-//         }
-//     }
-
-//     // console.log('new list', searchProductsList);
-//     displayProduct(searchProductsList);
-// }
-
-
+//search function
 function searchProduct(data) {
-    
-    if(data.length > 0 || data.trim().length > 0){
+
+    if (data.length > 0 || data.trim().length > 0) {
         data.toLowerCase()
         let searchProductsList = [];
-    
+
         for (let index = 0; index < products.length; index++) {
             if (products[index].name.toLowerCase().includes(data.toLowerCase())) {
-    
+
                 //highlight the entered characters in the search
-                let productCopy = {...products[index]};
+                let productCopy = { ...products[index] };
                 productCopy["spanName"] = products[index].name.toLowerCase().replaceAll(data.toLowerCase(), `<span class="text-danger fw-bold">${data.toLowerCase()}</span>`);
 
                 searchProductsList.push(productCopy);
@@ -397,8 +377,11 @@ function searchProduct(data) {
         }
         displayProduct(searchProductsList);
     }
-    else{
+    else {
         displayProduct(products);
     }
 
 }
+
+
+
