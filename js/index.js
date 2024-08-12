@@ -1,6 +1,7 @@
 const tableHead = ``;
 
 let products = localStorage.getItem('products') ? JSON.parse(localStorage.getItem('products')) : [];
+products.sort((a, b) => a.name.localeCompare(b.name));
 
 
 // console.log(products);
@@ -17,7 +18,14 @@ let checkprice = false;
 let checkCat = false;
 let checkDis = false;
 
+
+//global for the sorting
+let productsList = [];
+let searchProductsList = [];
+
+
 displayProduct(products);
+
 
 
 // commone regex
@@ -233,10 +241,11 @@ function addProduct(thisProductIndex) {
 }
 
 //display products
-function displayProduct(productsList) {
+function displayProduct(list) {
     let tableBody = '';
+    //global so it can be accessable from sortby()
+    productsList = list;
 
-    if(btnChecked.length == 0)productsList.sort((a, b) => a.name.localeCompare(b.name));
     // console.log(productsList);
 
     if (productTable.children.length === 0) {
@@ -245,7 +254,7 @@ function displayProduct(productsList) {
             `<thead id = "tableHead" class = " text-center">
         <th>Index</th>
         <th><button name = "name" id = "nameCol" class = "sort-btn btn text-light fw-bold p-0">Name</button></th>
-        <th><button name = "price" id = "priceCol" class = "sort-btn btn text-light fw-bold p-0">Price</button>$</th>
+        <th><button name = "price" id = "priceCol" class = "sort-btn btn text-light fw-bold p-0">Price$</button></th>
         <th><button name = "category" id = "catCol" class = "sort-btn btn text-light fw-bold p-0">Category</button></th>
         <th><button name = "discribe" id = "desCol" class = "sort-btn btn text-light fw-bold p-0">Descreption</button></th>
         <th>Update</th>
@@ -280,8 +289,56 @@ function displayProduct(productsList) {
 
 }
 
-
 //sorting the table
+function sortBy(fieldName) {
+    const sortbtns = document.querySelectorAll(".sort-btn");
+    const listToBeSorted = searchProductsList ? productsList : searchProductsList;
+
+    console.log('Sorting by:', listToBeSorted);
+    let btnIndex = 0;
+    for (let i = 0; i < sortbtns.length; i ++){
+        if (sortbtns[i].name === fieldName) {
+            btnIndex = i;
+        }
+        if (sortbtns[i].name !== fieldName) {
+            sortbtns[i].classList.remove('btn-warning','btn-danger');
+        }
+    }
+
+    //uncheck and sort by name (defult)
+    if(sortbtns[btnIndex].classList.contains('btn-danger')){
+        sortbtns[btnIndex].classList.remove('btn-danger');
+        sortbtns[0].classList.add('btn-warning');
+        listToBeSorted.sort((a, b) => a.name.localeCompare(b.name));
+    }
+    //sort by the same field descending
+    else if(sortbtns[btnIndex].classList.contains('btn-warning')){
+        sortbtns[btnIndex].classList.add('btn-danger');
+        sortbtns[btnIndex].classList.remove('btn-warning');
+        if(fieldName === 'price'){
+            listToBeSorted.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+        } else{
+            listToBeSorted.sort((a, b) => b[fieldName].localeCompare(a[fieldName]));
+        }
+    }
+    //sort by this field ascending
+    else{
+        sortbtns[btnIndex].classList.add('btn-warning');
+        if(fieldName === 'price'){
+            listToBeSorted.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+        } else{
+            listToBeSorted.sort((a, b) => a[fieldName].localeCompare(b[fieldName]));
+        }
+    }
+    displayProduct(listToBeSorted);
+}
+// Attaching event listeners to the sort buttons outside of sortBy
+document.querySelectorAll('.sort-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+        sortBy(this.name);
+    });
+});
+
 
 
 //delete funtion
@@ -359,6 +416,7 @@ function cancelUpdate(updatingSpace) {
 }
 
 //search function
+
 function searchProduct(data) {
 
     if (data.length > 0 || data.trim().length > 0) {
@@ -378,6 +436,7 @@ function searchProduct(data) {
         displayProduct(searchProductsList);
     }
     else {
+        searchProductsList = [];
         displayProduct(products);
     }
 
