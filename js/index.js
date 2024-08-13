@@ -441,6 +441,3 @@ function searchProduct(data) {
     }
 
 }
-
-
-
