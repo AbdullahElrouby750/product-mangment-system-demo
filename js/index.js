@@ -336,6 +336,7 @@ function sortBy(fieldName) {
 document.querySelectorAll('.sort-btn').forEach(btn => {
     btn.addEventListener('click', function () {
         sortBy(this.name);
+        
     });
 });
 
